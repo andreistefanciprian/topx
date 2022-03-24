@@ -42,8 +42,13 @@ class ExtractHighestNumbers:
 
 
 if __name__ == "__main__":
-    numbers = ExtractHighestNumbers("../genNumbers/numbers", 5)
-    # numbers = ExtractHighestNumbers("numbers", 5)
+
+    # define vars
+    file = sys.argv[1]
+    number_of_highest_numbers = int(sys.argv[2])
+
+    # get highest numbers from file
+    numbers = ExtractHighestNumbers(file, number_of_highest_numbers)
     for number in numbers.top_x_numbers:
         print(number)
 
