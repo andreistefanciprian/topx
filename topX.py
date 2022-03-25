@@ -12,10 +12,14 @@ class ExtractHighestNumbers:
     def __init__(self, numbers_file=None, highest_number_count=None):
         self.numbers_file = numbers_file
         self.highest_number_count = highest_number_count
-        self._all_numbers = self._extract_numbers_from_file()
-        self.top_x_numbers = self._get_highest_numbers()
+        self.all_numbers = self.__extract_numbers_from_file()
+        self.top_x_numbers = self.__get_highest_numbers()
 
-    def timing_val(func):
+    def __timing_val(func):
+        """
+        Decorator used for measuring time execution of functions.
+        """
+
         def wrapper(*arg, **kw):
             t1 = time.time()
             result = func(*arg, **kw)
@@ -24,10 +28,10 @@ class ExtractHighestNumbers:
             return result
         return wrapper
 
-    @timing_val
-    def _extract_numbers_from_file(self):
+    @__timing_val
+    def __extract_numbers_from_file(self):
         """
-        Populate all_numbers list witth all the numbers from file.
+        Populate all_numbers list with all the numbers from file.
         """
 
         numbers = []
@@ -43,17 +47,17 @@ class ExtractHighestNumbers:
         else:
             raise Exception(f'{self.numbers_file} does not exist!')
 
-    @timing_val   
-    def _get_highest_numbers(self):
+    @__timing_val
+    def __get_highest_numbers(self):
         """
         Get highest X numbers from list of all numbers.
         """
 
         # slower 1
-        # self._all_numbers.sort(reverse=True)
-        # return self._all_numbers[:self.highest_number_count]
+        # self.all_numbers.sort(reverse=True)
+        # return self.all_numbers[:self.highest_number_count]
 
-        return nlargest(self.highest_number_count, self._all_numbers)
+        return nlargest(self.highest_number_count, self.all_numbers)
         
 
 
