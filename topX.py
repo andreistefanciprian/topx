@@ -13,9 +13,9 @@ class ExtractHighestNumbers:
         self.numbers_file = numbers_file
         self.highest_number_count = highest_number_count
         self.all_numbers = self.__extract_numbers_from_file()
-        self.top_x_numbers = self.__get_highest_numbers()
+        self.largest_numbers = self.__get_largest_numbers()
 
-    def __timing_val(func):
+    def __time_track(func):
         """
         Decorator used for measuring time execution of functions.
         """
@@ -28,7 +28,7 @@ class ExtractHighestNumbers:
             return result
         return wrapper
 
-    @__timing_val
+    @__time_track
     def __extract_numbers_from_file(self):
         """
         Populate all_numbers list with all the numbers from file.
@@ -47,8 +47,8 @@ class ExtractHighestNumbers:
         else:
             raise Exception(f'{self.numbers_file} does not exist!')
 
-    @__timing_val
-    def __get_highest_numbers(self):
+    @__time_track
+    def __get_largest_numbers(self):
         """
         Get highest X numbers from list of all numbers.
         """
@@ -69,7 +69,7 @@ if __name__ == "__main__":
 
     # get highest numbers from file
     numbers = ExtractHighestNumbers(file, number_of_highest_numbers)
-    for number in numbers.top_x_numbers:
+    for number in numbers.largest_numbers:
         print(number)
 
 
