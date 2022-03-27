@@ -5,39 +5,40 @@ import (
 	"fmt"
 	"log"
 	"os"
-	"strconv"
 	"sort"
+	"strconv"
 	"time"
 )
 
 type TopNumbers struct {
-	numbersFile string
+	numbersFile        string
 	highestNumberCount int
-	allNumbers []int
-	largestNumbers []int
+	allNumbers         []int
+	largestNumbers     []int
 }
 
 func timeTrack(start time.Time, name string) {
-    elapsed := time.Since(start)
-    log.Printf("%s ran in %s", name, elapsed)
+	elapsed := time.Since(start)
+	log.Printf("%s ran in %s", name, elapsed)
 }
 
 func (n *TopNumbers) generateList() {
 
 	defer timeTrack(time.Now(), "generateList")
-	var numbers []int
+
 	f, err := os.Open(n.numbersFile)
 	defer f.Close()
 	if err != nil {
-		log.Fatalf("failed to open")
+		log.Fatalf(err.Error())
 	}
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
+	var numbers []int
 	for scanner.Scan() {
 		number := scanner.Text()
 		if n, err := strconv.Atoi(number); err == nil {
 			numbers = append(numbers, n)
-		}	
+		}
 	}
 	n.allNumbers = numbers
 }
@@ -49,11 +50,10 @@ func (n *TopNumbers) getLargestNumbers() {
 	n.largestNumbers = n.allNumbers[len(n.allNumbers)-n.highestNumberCount:]
 }
 
-
 func main() {
 
 	n1 := TopNumbers{
-		numbersFile: "numbers",
+		numbersFile:        "numbers",
 		highestNumberCount: 5,
 	}
 	n1.generateList()
