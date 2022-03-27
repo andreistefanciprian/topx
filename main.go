@@ -2,6 +2,7 @@ package main
 
 import (
 	"bufio"
+	"flag"
 	"fmt"
 	"log"
 	"os"
@@ -19,7 +20,7 @@ type TopNumbers struct {
 
 func timeTrack(start time.Time, name string) {
 	elapsed := time.Since(start)
-	log.Printf("%s ran in %s", name, elapsed)
+	fmt.Printf("%v ran in %v \n", name, elapsed)
 }
 
 func (n *TopNumbers) generateList() {
@@ -50,16 +51,30 @@ func (n *TopNumbers) getLargestNumbers() {
 	n.largestNumbers = n.allNumbers[len(n.allNumbers)-n.highestNumberCount:]
 }
 
-func main() {
+func (n *TopNumbers) printNumbers() {
 
-	n1 := TopNumbers{
-		numbersFile:        "numbers",
-		highestNumberCount: 5,
-	}
-	n1.generateList()
-	n1.getLargestNumbers()
-	fmt.Println("\nLargest numbers are:")
-	for _, each_ln := range n1.largestNumbers {
+	fmt.Printf("Largest %v numbers are: \n", n.highestNumberCount)
+	for _, each_ln := range n.largestNumbers {
 		fmt.Println(each_ln)
 	}
+}
+
+func main() {
+
+	// define cli flags
+	var file string
+	var count int
+	flag.StringVar(&file, "file", "file.txt", "Specify file path.")
+	flag.IntVar(&count, "count", 5, "Specify how many of the largest numbers you want to extract from file.")
+	flag.Parse()
+
+	// create struct with params
+	n := TopNumbers{
+		numbersFile:        file,
+		highestNumberCount: count,
+	}
+
+	n.generateList()      // generate []int slice from file
+	n.getLargestNumbers() // extract largest X numbers from []int slice
+	n.printNumbers()      // print largest numbers
 }
