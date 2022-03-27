@@ -25,7 +25,7 @@ func timeTrack(start time.Time, name string) {
 	fmt.Printf("%v ran in %v \n", name, elapsed)
 }
 
-// generate []int slice from files
+// generate []int slice from file
 func (n *TopNumbers) generateSlice() {
 
 	defer timeTrack(time.Now(), "generateSlice")
