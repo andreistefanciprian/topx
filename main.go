@@ -18,15 +18,17 @@ type TopNumbers struct {
 	largestNumbers     []int
 }
 
+// calculates how long it takes to execute a function
 func timeTrack(start time.Time, name string) {
+
 	elapsed := time.Since(start)
 	fmt.Printf("%v ran in %v \n", name, elapsed)
 }
 
-func (n *TopNumbers) generateList() {
+// generate []int slice from files
+func (n *TopNumbers) generateSlice() {
 
-	defer timeTrack(time.Now(), "generateList")
-
+	defer timeTrack(time.Now(), "generateSlice")
 	f, err := os.Open(n.numbersFile)
 	defer f.Close()
 	if err != nil {
@@ -44,6 +46,7 @@ func (n *TopNumbers) generateList() {
 	n.allNumbers = numbers
 }
 
+// extract largest x numbers from []int
 func (n *TopNumbers) getLargestNumbers() {
 
 	defer timeTrack(time.Now(), "getLargestNumbers")
@@ -51,6 +54,7 @@ func (n *TopNumbers) getLargestNumbers() {
 	n.largestNumbers = n.allNumbers[len(n.allNumbers)-n.highestNumberCount:]
 }
 
+// print largest numbers
 func (n *TopNumbers) printNumbers() {
 
 	fmt.Printf("Largest %v numbers are: \n", n.highestNumberCount)
@@ -74,7 +78,7 @@ func main() {
 		highestNumberCount: count,
 	}
 
-	n.generateList()      // generate []int slice from file
+	n.generateSlice()     // generate []int slice from file
 	n.getLargestNumbers() // extract largest X numbers from []int slice
 	n.printNumbers()      // print largest numbers
 }
