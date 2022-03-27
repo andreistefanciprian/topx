@@ -8,12 +8,11 @@ import (
 	"strconv"
 	"sort"
 	"time"
-	// "math/big"
 )
 
 func timeTrack(start time.Time, name string) {
     elapsed := time.Since(start)
-    log.Printf("%s took %s", name, elapsed)
+    log.Printf("%s ran in %s", name, elapsed)
 }
 
 func generateList(file string) []int {
@@ -39,11 +38,7 @@ func generateList(file string) []int {
 		number := scanner.Text()
 		if n, err := strconv.Atoi(number); err == nil {
 			numbers = append(numbers, n)
-		}
-		// n := new(big.Int)
-		// if n, err := n.SetString(number, 10); err == false {
-		// 	numbers = append(numbers, n)
-		// }	
+		}	
 		
 	}
 
@@ -75,13 +70,8 @@ func main() {
 
 	// get largest X numbers from file
 	allNumbers = generateList(numbersFile)
-
-	// fmt.Println("\nAll numbers are:")
-	// for _, each_ln := range allNumbers {
-	// 	fmt.Println(each_ln)
-	// }
-
 	largestNumbers = getLargestNumbers(allNumbers, highestNumberCount)
+
 	fmt.Println("\nLargest numbers are:")
 	for _, each_ln := range largestNumbers {
 		fmt.Println(each_ln)
