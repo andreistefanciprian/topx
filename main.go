@@ -12,10 +12,21 @@ import (
 )
 
 type TopNumbers struct {
-	numbersFile        string
-	highestNumberCount int
-	allNumbers         []int
-	largestNumbers     []int
+	numbersFile    string
+	count          int
+	largestNumbers []int
+}
+
+// get minimum number and its index from slice of int
+func min(s []int) (min [2]int) {
+	min[1] = s[0]
+	for i, v := range s {
+		if min[1] > v {
+			min[1] = v
+			min[0] = i
+		}
+	}
+	return
 }
 
 // calculates how long it takes to execute a function
@@ -26,38 +37,37 @@ func timeTrack(start time.Time, name string) {
 }
 
 // generate []int slice from file
-func (n *TopNumbers) generateSlice() {
+// []int slice contains largest numbers
+func (s *TopNumbers) generateSlice() {
 
 	defer timeTrack(time.Now(), "generateSlice")
-	f, err := os.Open(n.numbersFile)
-	defer f.Close()
+	f, err := os.Open(s.numbersFile)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
+	defer f.Close()
+	// load file into memory, line by line instead of all the file at once
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
 	var numbers []int
 	for scanner.Scan() {
 		number := scanner.Text()
 		if n, err := strconv.Atoi(number); err == nil {
-			numbers = append(numbers, n)
+			if len(numbers) < s.count {
+				numbers = append(numbers, n)
+			} else if m := min(numbers); n > m[1] {
+				numbers[m[0]] = n
+			}
 		}
 	}
-	n.allNumbers = numbers
-}
-
-// extract largest x numbers from []int
-func (n *TopNumbers) getLargestNumbers() {
-
-	defer timeTrack(time.Now(), "getLargestNumbers")
-	sort.Ints(n.allNumbers)
-	n.largestNumbers = n.allNumbers[len(n.allNumbers)-n.highestNumberCount:]
+	s.largestNumbers = numbers
 }
 
 // print largest numbers
 func (n *TopNumbers) printNumbers() {
 
-	fmt.Printf("Largest %v numbers are: \n", n.highestNumberCount)
+	fmt.Printf("Largest %v numbers are: \n", n.count)
+	sort.Sort(sort.Reverse(sort.IntSlice(n.largestNumbers)))
 	for _, each_ln := range n.largestNumbers {
 		fmt.Println(each_ln)
 	}
@@ -74,11 +84,10 @@ func main() {
 
 	// create struct with params
 	n := TopNumbers{
-		numbersFile:        file,
-		highestNumberCount: count,
+		numbersFile: file,
+		count:       count,
 	}
 
-	n.generateSlice()     // generate []int slice from file
-	n.getLargestNumbers() // extract largest X numbers from []int slice
-	n.printNumbers()      // print largest numbers
+	n.generateSlice() // generate []int slice from file with largest X numbers
+	n.printNumbers()  // print largest numbers
 }
