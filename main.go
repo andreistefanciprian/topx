@@ -40,16 +40,19 @@ func timeTrack(start time.Time, name string) {
 // []int slice contains largest numbers
 func (s *TopNumbers) generateSlice() {
 
-	defer timeTrack(time.Now(), "generateSlice")
+	defer timeTrack(time.Now(), "generateSlice") // calculates the time it takes to execute this method
+
+	// open file
 	f, err := os.Open(s.numbersFile)
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
 	defer f.Close()
-	// load file into memory, line by line instead of all the file at once
+
+	// read file line by line instead of loading all the file into memory at once
 	scanner := bufio.NewScanner(f)
 	scanner.Split(bufio.ScanLines)
-	var numbers []int
+	var numbers []int // holds largest X numbers
 	for scanner.Scan() {
 		number := scanner.Text()
 		if n, err := strconv.Atoi(number); err == nil {
